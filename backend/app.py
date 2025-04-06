@@ -7,18 +7,25 @@ from flask import Flask, request, jsonify
 import pandas as pd
 import joblib
 from flask_cors import CORS
+import os
 
 app = Flask(__name__)
 CORS(app)  # Enable CORS for communication with React frontend
 
-# Load the pre-trained model
-model = joblib.load('mlp_model.pkl')
+# Load all models from the models folder
+models = {}
+models_folder = 'models'
+for file in os.listdir(models_folder):
+    if file.endswith('.pkl'):
+        model_name = file.split('.')[0]
+        models[model_name] = joblib.load(os.path.join(models_folder, file))
 
 @app.route('/predict', methods=['POST'])
 def predict():
     """
     API endpoint for predicting prices.
     Expects a JSON payload with the following required fields:
+    - model (default: 'xgboost')
     - year
     - condition
     - frame_size
@@ -43,6 +50,11 @@ def predict():
             if field not in data or not data[field]:
                 return jsonify({'error': f'Missing required field: {field}'}), 400
 
+        # Get the model name from the request, default to 'xgboost'
+        model_name = data.get('model', 'xgboost')
+        if model_name not in models:
+            return jsonify({'error': f'Model {model_name} not found'}), 400
+
         # Create a DataFrame with the correct column order
         input_data = pd.DataFrame([{
             'year': data['year'],
@@ -55,8 +67,8 @@ def predict():
             'type': data['type']
         }])
 
-        # Make a predictio
-        prediction = model.predict(input_data)
+        # Make a prediction using the selected model
+        prediction = models[model_name].predict(input_data)
         print(prediction)
         
         return jsonify({

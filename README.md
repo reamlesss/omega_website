@@ -1,70 +1,101 @@
-# Getting Started with Create React App
+# BikeEst - Bike Price Estimation Web Application
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+BikeEst is a web application designed to help users estimate the price of a bike based on its features. The application provides a user-friendly interface to input various bike parameters and displays a table of existing bike data for reference.
 
-## Available Scripts
+## Features
 
-In the project directory, you can run:
+- Estimate the price of a bike based on its features.
+- View a dataset of bikes with details such as type, condition, frame size, wheel size, material, and price.
+- Responsive design for seamless use on different devices.
 
-### `npm start`
+## Technologies Used
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- **Frontend**: React.js
+  - Components styled with Bootstrap for a clean and responsive UI.
+- **Backend**: Python Flask
+  - Provides APIs for handling requests and processing data.
+- **CSV Parsing**: [Papa Parse](https://www.papaparse.com/)
+  - Used to parse the `mtb-data.csv` file containing bike data.
+- **Data Visualization**: HTML tables styled with Bootstrap.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Dataset
 
-### `npm test`
+The application uses a dataset stored in `mtb-data.csv`, which contains the following columns:
+- Title
+- Type
+- Condition
+- Frame Size
+- Wheel Size
+- Material
+- Front Travel
+- Rear Travel
+- Price
+- URL
+- Year
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+This dataset is displayed in a table on the "About" page for user reference.
 
-### `npm run build`
+## How It Works
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+1. The application fetches the `mtb-data.csv` file from the `public` directory.
+2. The CSV file is parsed using Papa Parse to extract bike data.
+3. The parsed data is displayed in a table on the "About" page.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Getting Started
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Prerequisites
 
-### `npm run eject`
+- Node.js and npm installed on your machine.
+- Python and Flask installed for backend development.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### Installation
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+1. Clone the repository:
+   ```bash
+   git clone <repository-url>
+   ```
+2. Navigate to the project directory:
+   ```bash
+   cd omega
+   ```
+3. Install frontend dependencies:
+   ```bash
+   npm install
+   ```
+4. Navigate to the backend directory (if applicable) and install Python dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### Running the Application
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+#### Start the Backend Server
+Navigate to the backend directory and run:
+```bash
+python3 app.py
+```
+
+#### Start the Frontend Development Server
+Navigate to the project root directory and run:
+```bash
+npm start
+```
+Open [http://localhost:3000](http://localhost:3000) in your browser to view the application.
+
+## Future Enhancements
+
+- Add a feature to allow users to upload their own bike data.
+- Implement advanced filtering and sorting for the dataset.
+- Integrate a machine learning model to provide more accurate price estimations.
 
 ## Learn More
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+To learn more about React, visit the [React documentation](https://reactjs.org/).
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+To learn more about Flask, visit the [Flask documentation](https://flask.palletsprojects.com/).
 
-### Code Splitting
+For more information about Papa Parse, visit [Papa Parse documentation](https://www.papaparse.com/).
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## License
 
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+This project is licensed under the MIT License.

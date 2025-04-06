@@ -1,24 +1,96 @@
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import Container from "react-bootstrap/Container";
+import Nav from "react-bootstrap/Nav";
+import Navbar from "react-bootstrap/Navbar";
+import Button from "react-bootstrap/Button";
+import "bootstrap/dist/css/bootstrap.min.css";
+import Home from "./components/Home";
+import BikePriceForm from "./components/BikePriceform";
+import About from "./components/About";
+import "./App.css";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Navbar expand="lg" className="bg-body-tertiary">
+        <Container>
+          <Navbar.Brand as={Link} to="/">
+            BikeEst
+          </Navbar.Brand>
+          <Navbar.Toggle aria-controls="basic-navbar-nav" />
+          <Navbar.Collapse id="basic-navbar-nav">
+            <Nav className="me-auto">
+              <Nav.Link as={Link} to="/">
+                Home
+              </Nav.Link>
+              <Nav.Link as={Link} to="/price-guessing">
+                Price Guessing
+              </Nav.Link>
+              <Nav.Link as={Link} to="/about">
+                About BikeEst
+              </Nav.Link>
+            </Nav>
+          </Navbar.Collapse>
+        </Container>
+      </Navbar>
+
+      <div className="d-flex flex-column justify-content-center align-items-center vh-100 mb-5">
+        <h1 className="text-center logo-text fw-bold my-2">
+          <i>Bike-Est</i>
+        </h1>
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <>
+                <h1 className="fs-1 fw-bold text-center">Welcome to BikeEst</h1>
+                <h2 className="fs-4">
+                  <i>"Your one-stop solution for pricing your bikes"</i>
+                </h2>
+                <hr className="w-50" />
+                <div className="d-flex gap-3 mb-4">
+                  <Button variant="primary" as={Link} to="/price-guessing">
+                    Price Guess
+                  </Button>
+                  <Button variant="primary" as={Link} to="/about">
+                    About BikeEst
+                  </Button>
+                </div>
+                <Home />
+              </>
+            }
+          />
+          <Route path="/price-guessing" element={<BikePriceForm />} />
+          <Route path="/about" element={<About />} />
+        </Routes>
+      </div>
+
+      {/* <Container className="d-flex flex-column justify-content-center align-items-center vh-100 w-50">
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <>
+                <div className="d-flex gap-3 mb-4">
+                  <Button variant="primary" as={Link} to="/">
+                    Home
+                  </Button>
+                  <Button variant="primary" as={Link} to="/price-guessing">
+                    Price Guess
+                  </Button>
+                  <Button variant="primary" as={Link} to="/about">
+                    About BikeEst
+                  </Button>
+                </div>
+                <Home />
+              </>
+            }
+          />
+          <Route path="/price-guessing" element={<BikePriceForm />} />
+          <Route path="/about" element={<About />} />
+        </Routes>
+      </Container> */}
+    </Router>
   );
 }
 

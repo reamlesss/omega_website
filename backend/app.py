@@ -55,7 +55,7 @@ def predict():
             'type': data['type']
         }])
 
-        # Make a prediction
+        # Make a predictio
         prediction = model.predict(input_data)
         print(prediction)
         

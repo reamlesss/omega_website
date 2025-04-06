@@ -4,7 +4,6 @@ import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import Button from "react-bootstrap/Button";
 import "bootstrap/dist/css/bootstrap.min.css";
-import Home from "./components/Home";
 import BikePriceForm from "./components/BikePriceform";
 import About from "./components/About";
 import "./App.css";
@@ -56,7 +55,7 @@ function App() {
                     About BikeEst
                   </Button>
                 </div>
-                <Home />
+                
               </>
             }
           />

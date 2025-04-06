@@ -9,6 +9,15 @@ import About from "./components/About";
 import "./App.css";
 
 function App() {
+  // Add a global error handler for debugging
+  window.addEventListener("error", (event) => {
+    console.error("Global error caught:", event.message);
+  });
+
+  window.addEventListener("unhandledrejection", (event) => {
+    console.error("Unhandled promise rejection:", event.reason);
+  });
+
   return (
     <Router>
       <Navbar expand="lg" className="bg-body-tertiary">
@@ -34,15 +43,15 @@ function App() {
       </Navbar>
 
       <div className="d-flex flex-column justify-content-center align-items-center vh-100 mb-5">
-        <h1 className="text-center logo-text fw-bold my-2">
-          <i>Bike-Est</i>
-        </h1>
         <Routes>
           <Route
             path="/"
             element={
               <>
-                <h1 className="fs-1 fw-bold text-center">Welcome to BikeEst</h1>
+                <h1 className="text-center logo-text fw-bold my-2">
+                  <i>Bike-Est</i>
+                </h1>
+                <h1 className="fs-1 fw-bold text-center">Welcome!</h1>
                 <h2 className="fs-4">
                   <i>"Your one-stop solution for pricing your bikes"</i>
                 </h2>
@@ -55,7 +64,6 @@ function App() {
                     About BikeEst
                   </Button>
                 </div>
-                
               </>
             }
           />

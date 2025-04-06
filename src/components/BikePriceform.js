@@ -3,6 +3,7 @@ import axios from "axios";
 import { Form, Button } from "react-bootstrap";
 
 function BikePriceForm() {
+  // State to manage form data
   const [formData, setFormData] = useState({
     type: "",
     condition: "",
@@ -11,34 +12,51 @@ function BikePriceForm() {
     material: "",
     front_travel: "",
     rear_travel: "",
-    year: "", // Ensure year is included
+    year: "",
   });
 
+  // State to store the predicted price and any errors
   const [predictedPrice, setPredictedPrice] = useState(null);
-  const [error, setError] = useState(null); // Track errors
+  const [error, setError] = useState(null);
 
+  // Handle input changes and update form data
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  // Handle form submission and send data to the prediction API
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(null); // Reset error state
+    setError(null);
     try {
+      const payload = {
+        ...formData,
+        // Convert data for compatibility with the prediction model
+        type: formData.type.toLowerCase(),
+        condition: parseInt(formData.condition),
+        wheel_size: parseFloat(formData.wheel_size),
+        front_travel: parseFloat(formData.front_travel),
+        rear_travel:
+          formData.rear_travel === "Hardtail"
+            ? 0
+            : parseFloat(formData.rear_travel),
+        year: parseInt(formData.year),
+      };
+
       const response = await axios.post(
         "http://127.0.0.1:5000/predict",
-        formData
+        payload
       );
       setPredictedPrice(response.data.predicted_price);
     } catch (err) {
-      console.error("Error predicting price:", err);
-      setError("Failed to predict price. Please try again.");
+      console.error("Error during prediction:", err);
+      setError(err.response?.data?.error || "Connection error with the server");
     }
   };
 
   return (
     <>
-      <h4>Fill the form</h4>
+      <h4>Fill out the form</h4>
       <Form onSubmit={handleSubmit}>
         <div
           style={{
@@ -48,140 +66,129 @@ function BikePriceForm() {
             alignItems: "center",
           }}
         >
+          {/* Bike Type */}
           <Form.Group style={{ flex: "1 1 calc(33.333% - 1rem)" }}>
             <Form.Label>Type</Form.Label>
-            <Form.Select name="type" onChange={handleChange}>
-              <option value="">Select Type</option>
-              <option value="ENDURO">ENDURO</option>
-              <option value="TRAIL">TRAIL</option>
+            <Form.Select name="type" onChange={handleChange} required>
+              <option value="">Select type</option>
               <option value="DOWNHILL">DOWNHILL</option>
+              <option value="ENDURO">ENDURO</option>
               <option value="XC">XC</option>
-              <option value="E-BIKE">E-BIKE</option>
+              <option value="TRAIL">TRAIL</option>
             </Form.Select>
           </Form.Group>
+
+          {/* Bike Condition */}
           <Form.Group style={{ flex: "1 1 calc(33.333% - 1rem)" }}>
             <Form.Label>Condition</Form.Label>
-            <Form.Select name="condition" onChange={handleChange}>
-              <option value="">Select Condition</option>
-              <option value="New">New</option>
-              <option value="Excellent">Excellent</option>
-              <option value="Good">Good</option>
-              <option value="Poor">Poor</option>
-              <option value="For Parts">For Parts</option>
+            <Form.Select name="condition" onChange={handleChange} required>
+              <option value="">Select condition</option>
+              <option value="1">New</option>
+              <option value="2">Excellent</option>
+              <option value="3">Good</option>
+              <option value="4">Poor</option>
+              <option value="5">For parts</option>
             </Form.Select>
           </Form.Group>
+
+          {/* Frame Size */}
           <Form.Group style={{ flex: "1 1 calc(33.333% - 1rem)" }}>
-            <Form.Label>Frame size</Form.Label>
-            <Form.Select name="frame_size" onChange={handleChange}>
-              <option value="">Select Frame Size</option>
-              <option value="XXS">XXS</option>
-              <option value="XS">XS</option>
+            <Form.Label>Frame Size</Form.Label>
+            <Form.Select name="frame_size" onChange={handleChange} required>
+              <option value="">Select size</option>
               <option value="S">S</option>
               <option value="M">M</option>
               <option value="L">L</option>
               <option value="XL">XL</option>
-              <option value="XXL">XXL</option>
             </Form.Select>
           </Form.Group>
+
+          {/* Wheel Size */}
           <Form.Group style={{ flex: "1 1 calc(33.333% - 1rem)" }}>
-            <Form.Label>Wheel size</Form.Label>
-            <Form.Select name="wheel_size" onChange={handleChange}>
-              <option value="">Select Wheel Size</option>
-              <option value="29">29</option>
-              <option value="27.5">27.5</option>
-              <option value="26">26</option>
-              <option value="24">24</option>
-              <option value="20">20</option>
+            <Form.Label>Wheel Size</Form.Label>
+            <Form.Select name="wheel_size" onChange={handleChange} required>
+              <option value="">Select size</option>
+              <option value="26">26"</option>
+              <option value="27.5">27.5"</option>
+              <option value="29">29"</option>
             </Form.Select>
           </Form.Group>
+
+          {/* Material */}
           <Form.Group style={{ flex: "1 1 calc(33.333% - 1rem)" }}>
             <Form.Label>Material</Form.Label>
-            <Form.Select name="material" onChange={handleChange}>
-              <option value="">Select Material</option>
+            <Form.Select name="material" onChange={handleChange} required>
+              <option value="">Select material</option>
               <option value="Aluminium">Aluminium</option>
               <option value="Carbon">Carbon</option>
-              <option value="Chromoly">Chromoly</option>
               <option value="Steel">Steel</option>
               <option value="Titanium">Titanium</option>
-              <option value="Other">Other</option>
             </Form.Select>
           </Form.Group>
-          <Form.Group
-            style={{ flex: "1 1 calc(33.333% - 1rem)" }}
-            controlId="frontTravel"
-          >
-            <Form.Label>Front travel</Form.Label>
-            <Form.Select
-              name="front_travel"
-              onChange={handleChange}
-              defaultValue=""
-            >
-              <option value="" disabled>
-                Choose value
-              </option>
-              <option value="190">190</option>
-              <option value="180">180</option>
-              <option value="175">175</option>
-              <option value="170">170</option>
-              <option value="160">160</option>
-              <option value="150">150</option>
-              <option value="140">140</option>
-              <option value="130">130</option>
-              <option value="120">120</option>
-              <option value="110">110</option>
-              <option value="100">100</option>
-              <option value="90">90</option>
-              <option value="80">80</option>
-              <option value="60">60</option>
-            </Form.Select>
-          </Form.Group>
+
+          {/* Front Travel */}
           <Form.Group style={{ flex: "1 1 calc(33.333% - 1rem)" }}>
-            <Form.Label>Rear travel</Form.Label>
-            <Form.Select name="rear_travel" onChange={handleChange}>
-              <option value="">Choose travel</option>
+            <Form.Label>Front Travel (mm)</Form.Label>
+            <Form.Select name="front_travel" onChange={handleChange} required>
+              <option value="">Select value</option>
+              {[60, 80, 100, 120, 140, 150, 160, 170, 180, 190, 200].map(
+                (value) => (
+                  <option key={value} value={value}>
+                    {value}
+                  </option>
+                )
+              )}
+            </Form.Select>
+          </Form.Group>
+
+          {/* Rear Travel */}
+          <Form.Group style={{ flex: "1 1 calc(33.333% - 1rem)" }}>
+            <Form.Label>Rear Travel</Form.Label>
+            <Form.Select name="rear_travel" onChange={handleChange} required>
+              <option value="">Select value</option>
               <option value="Hardtail">Hardtail</option>
-              <option value="200">200</option>
-              <option value="190">190</option>
-              <option value="180">180</option>
-              <option value="170">170</option>
-              <option value="160">160</option>
-              <option value="155">155</option>
-              <option value="150">150</option>
-              <option value="145">145</option>
-              <option value="140">140</option>
-              <option value="135">135</option>
-              <option value="130">130</option>
-              <option value="120">120</option>
-              <option value="110">110</option>
-              <option value="100">100</option>
-              <option value="80">80</option>
+              {[80, 100, 120, 140, 150, 160, 170, 180, 190, 200].map(
+                (value) => (
+                  <option key={value} value={value}>
+                    {value} mm
+                  </option>
+                )
+              )}
             </Form.Select>
           </Form.Group>
+
+          {/* Year of Manufacture */}
           <Form.Group style={{ flex: "1 1 calc(33.333% - 1rem)" }}>
-            <Form.Label>Year</Form.Label>
+            <Form.Label>Year of Manufacture</Form.Label>
             <Form.Control
               type="number"
               name="year"
-              placeholder="Enter Year"
+              placeholder="Enter year"
+              min="2000"
+              max="2025"
               onChange={handleChange}
+              required
             />
           </Form.Group>
-          <div
-            className="d-flex justify-content-center align-items-center"
-            style={{ flex: "1 1 100%" }}
-          >
-            <Button
-              variant="primary"
-              type="submit"
-              className="btn btn-primary w-50"
-            >
-              Submit
+
+          {/* Submit Button */}
+          <div style={{ flex: "1 1 100%", textAlign: "center" }}>
+            <Button variant="primary" type="submit" size="lg">
+              Calculate Price
             </Button>
           </div>
         </div>
       </Form>
-      {predictedPrice && <h5>Predicted Price: ${predictedPrice}</h5>}
-      {error && <p style={{ color: "red" }}>{error}</p>} {/* Display error */}
+
+      {/* Display Predicted Price */}
+      {predictedPrice && (
+        <div className="mt-3 text-center">
+          <h4>Estimated Price: ${Math.round(predictedPrice)}</h4>
+        </div>
+      )}
+
+      {/* Display Error Message */}
+      {error && <p className="text-danger mt-3 text-center">{error}</p>}
     </>
   );
 }

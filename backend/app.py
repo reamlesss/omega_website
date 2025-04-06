@@ -1,42 +1,71 @@
+"""
+This is a Flask application that provides an API endpoint for predicting prices based on input data.
+The application uses a pre-trained machine learning model to make predictions.
+"""
+
 from flask import Flask, request, jsonify
-import pickle
+import pandas as pd
+import joblib
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)  # Enable CORS for communication with React frontend
 
-# Load the model
-with open("model_exports/Neural_Network_MLP_-_logistic_pipeline.pkl", "rb") as f:
-    model = pickle.load(f)
+# Load the pre-trained model
+model = joblib.load('mlp_model.pkl')
 
 @app.route('/predict', methods=['POST'])
 def predict():
+    """
+    API endpoint for predicting prices.
+    Expects a JSON payload with the following required fields:
+    - year
+    - condition
+    - frame_size
+    - type
+
+    Optional fields:
+    - wheel_size
+    - material
+    - front_travel
+    - rear_travel
+
+    Returns:
+        JSON response with the predicted price or an error message.
+    """
     try:
-        # Log the incoming request data
+        # Retrieve data from the request
         data = request.json
-        print("Received data:", data)
-
-        # Ensure all required fields are present
-        required_fields = ['condition', 'frame_size', 'wheel_size', 'material', 'front_travel', 'rear_travel', 'year']
+        
+        # Validate required fields
+        required_fields = ['year', 'condition', 'frame_size', 'type']
         for field in required_fields:
-            if field not in data:
-                return jsonify({"error": f"Missing field: {field}"}), 400
+            if field not in data or not data[field]:
+                return jsonify({'error': f'Missing required field: {field}'}), 400
 
-        # Convert data to the format expected by the model
-        features = [
-            int(data['condition']),
-            int(data['frame_size']),
-            float(data['wheel_size']),
-            float(data['front_travel']),
-            float(data['rear_travel']),
-            int(data['year'])
-        ]
+        # Create a DataFrame with the correct column order
+        input_data = pd.DataFrame([{
+            'year': data['year'],
+            'condition': data['condition'],
+            'frame_size': data['frame_size'],
+            'wheel_size': data.get('wheel_size', None),
+            'material': data.get('material', None),
+            'front_travel': data.get('front_travel', None),
+            'rear_travel': data.get('rear_travel', None),
+            'type': data['type']
+        }])
 
-        # Make prediction
-        prediction = model.predict([features])[0]
-        return jsonify({"predicted_price": prediction})
+        # Make a prediction
+        prediction = model.predict(input_data)
+        print(prediction)
+        
+        return jsonify({
+            'predicted_price': round(float(prediction[0]), 2)
+        })
 
     except Exception as e:
-        print("Error during prediction:", e)
-        return jsonify({"error": "An error occurred during prediction"}), 500
+        return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    # Run the Flask application in debug mode on port 5000
+    app.run(debug=True, port=5000)

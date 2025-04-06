@@ -5,6 +5,7 @@ import { Form, Button } from "react-bootstrap";
 function BikePriceForm() {
   // State to manage form data
   const [formData, setFormData] = useState({
+    model: "xgboost", // Default model
     type: "",
     condition: "",
     frame_size: "",
@@ -66,6 +67,19 @@ function BikePriceForm() {
             alignItems: "center",
           }}
         >
+          {/* Model Selection */}
+          <Form.Group style={{ flex: "1 1 calc(33.333% - 1rem)" }}>
+            <Form.Label>Model</Form.Label>
+            <Form.Select name="model" onChange={handleChange} required>
+              <option value="xgboost_model">XGBoost</option>
+              <option value="mlp_model">MLP model</option>
+              <option value="decision_tree_model">Decision tree model</option>
+              <option value="random_forest_model">Random Forest</option>
+              <option value="linear_regression_model">Linear Regression</option>
+              {/* Add more models as needed */}
+            </Form.Select>
+          </Form.Group>
+
           {/* Bike Type */}
           <Form.Group style={{ flex: "1 1 calc(33.333% - 1rem)" }}>
             <Form.Label>Type</Form.Label>

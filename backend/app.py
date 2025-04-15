@@ -10,7 +10,7 @@ from flask_cors import CORS
 import os
 
 app = Flask(__name__)
-CORS(app)  # Enable CORS for communication with React frontend
+CORS(app,supports_credentials=True)  # Enable CORS for communication with React frontend
 
 # Load all models from the models folder
 models = {}

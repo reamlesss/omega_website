@@ -1,14 +1,131 @@
+body {
+  background-color: rgb(20, 20, 20);
+  transition: background-color 0.5s ease-in-out;
+}
+.font-l {
+  font-family: "Lexend", sans-serif;
+}
+Nav {
+  color: black !important;
+}
 .btn-primary {
-  background-color: gray !important;
+  font-family: "Lexend", sans-serif !important;
+  font-weight: bold;
+  padding: 8px;
+  width: 100%;
   border-color: transparent !important;
+  /* border-color: rgb(51, 230, 66); */
+  /* box-shadow: 0px 0px 2px rgb(82, 255, 82); */
+  /* background-color: rgb(0, 145, 31); */
+  background-color: white;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+  background-color: rgb(41, 41, 41) !important;
+}
+.btn-primary:hover {
+  background-color: rgb(41, 41, 41) !important;
+  transform: scale(1.02);
+}
+
+.menu-btn {
+  font-family: "Lexend", sans-serif !important;
+  font-weight: bold;
+  padding: 8px;
+  width: 100% !important;
+  border-color: transparent !important;
+  /* border-color: rgb(51, 230, 66); */
+  /* box-shadow: 0px 0px 2px rgb(82, 255, 82); */
+  /* background-color: rgb(0, 145, 31); */
+  background-color: white;
+  transition: 0.5s;
+  padding: 0p !important;
 }
 
 hr {
   border: 3px solid black !important;
   background-color: black !important;
 }
+.logo {
+  user-select: none !important;
+  font-family: "Finger Paint", sans-serif;
+}
 
-.logo-text{
-  letter-spacing: 10px !important;
+.non-selectable {
+  user-select: none !important;
+}
+
+.form-cont{
+  width: 500px;
+  height: 80%;
+}
+.logo-text {
+  user-select: none !important;
+  color: white !important;
+  font-family: "Finger Paint", sans-serif !important;
+  /* letter-spacing: 10px !important; */
   font-size: 4rem !important;
+}
+
+.about-intro{
+  margin-top: 10rem !important;
+}
+
+Form {
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.336);
+  padding: 30px;
+  border-radius: 15px;
+  font-family: "Lexend", sans-serif !important;
+  background-color: white;
+  animation: fadeIn 1s forwards;
+}
+.form-select {
+  padding: 15px !important;
+}
+
+.form-control {
+  padding: 15px !important;
+}
+
+.table {
+  opacity: 0;
+  animation: fadeIn 1s forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+h1,
+h2,
+p {
+  transition: transform 0.5s ease, opacity 0.5s ease;
+}
+
+h1:hover,
+h2:hover,
+p:hover {
+  transform: translateY(-5px);
+  opacity: 0.9;
+}
+
+@media (max-width: 768px) {
+  form > div {
+    flex-direction: column !important;
+  }
+
+  form .form-group {
+    width: 100% !important;
+    padding: 0px !important;
+  }
+  form .form-select {
+    width: 100% !important;
+  }
+
+  form .btn-primary {
+    width: 100%;
+  }
 }
